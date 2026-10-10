@@ -43,22 +43,47 @@ code --install-extension penmark-0.1.0.vsix
 
 ## Publish
 
-Publishing to the Visual Studio Marketplace has no manual review; automated checks run and the listing appears within minutes.
+Penmark is published on the Visual Studio Marketplace as [`brok.penmark`](https://marketplace.visualstudio.com/items?itemName=brok.penmark). Manage it (statistics, versions, unpublish) at the [publisher hub](https://marketplace.visualstudio.com/manage/publishers/brok/extensions/penmark/hub). There is no manual review: automated checks run, and a new version shows up within a few minutes. Installing it can take a few more minutes after the listing appears.
 
-Before the first release:
+### Releasing a new version
 
-1. **License:** done. The project is 0BSD (`LICENSE`), so anyone can use it with no conditions. The bundled jsdiff library is BSD-3-Clause, and its notice ships in `THIRD_PARTY_NOTICES.md`; keep that file up to date if you add bundled dependencies.
-2. **Publisher:** done. The publisher ID is `brok`, so the extension ID is `brok.penmark`. The preview script reads the ID at runtime, so nothing else depends on it.
-3. **Repository:** done. `repository`, `homepage` and `bugs` point at the public GitHub repo, so the README screenshots resolve to its URLs on the Marketplace page. The screenshots aren't packaged into the `.vsix`; the README links to the GitHub copies.
-4. **Create a Personal Access Token** in Azure DevOps with the *Marketplace → Manage* scope, then run `npx vsce login <publisher>`.
+1. **Bump the version** in `package.json` (`0.1.0` → `0.1.1` for fixes, `0.2.0` for features). While `"preview": true` is set, the listing shows a Preview badge.
+2. **Add a `CHANGELOG.md` entry** for that version, with the date.
+3. **Test, package and publish**, from the project folder:
 
-Each release:
+   ```sh
+   nvm use && npm test && npm run test:integration && npm run package && npx vsce publish --packagePath penmark-<version>.vsix
+   ```
 
-1. Update `version` in `package.json` and add an entry to `CHANGELOG.md`.
-2. `npm test && npm run test:integration`
-3. `npx vsce publish`
+   - `nvm use` switches to Node 20 from `.nvmrc`. `vsce` fails on Node 18 with `ReferenceError: File is not defined`.
+   - `npm run package` makes the minified build and `penmark-<version>.vsix`. Publishing that file means you publish exactly what was tested.
+   - Use the project's own `vsce` through `npx` inside the project folder. Run elsewhere, `npx` downloads a separate copy.
 
-To list it in Cursor and VSCodium as well, publish the same `.vsix` to [Open VSX](https://open-vsx.org) with `npx ovsx publish`.
+4. **Commit, tag and push:**
+
+   ```sh
+   git commit -am "Release <version>" && git tag -a v<version> -m "Penmark <version>" && git push && git push origin v<version>
+   ```
+
+### Logging in
+
+`vsce` needs a Personal Access Token for the `brok` publisher. If `npx vsce publish` says you aren't logged in, or the token has expired:
+
+1. At <https://dev.azure.com>, open your profile menu → **Personal access tokens** → **New token**.
+2. Set **Organization** to *All accessible organizations*, and **Scopes** to *Custom defined* → **Marketplace: Manage**.
+3. In the project folder, run `nvm use && npx vsce login brok` and paste the token.
+
+`npx vsce ls-publishers` shows which publishers you're logged in as.
+
+### Set up once (done for 0.1.0)
+
+- **License:** 0BSD (`LICENSE`), so anyone can use it with no conditions. The bundled jsdiff library is BSD-3-Clause, and its notice ships in `THIRD_PARTY_NOTICES.md`; keep that file up to date if you add bundled dependencies.
+- **Publisher:** `brok`, so the extension ID is `brok.penmark`. The preview script reads the ID at runtime, so nothing else depends on it.
+- **Repository:** `repository`, `homepage` and `bugs` point at the public GitHub repo, so the README screenshots resolve to its URLs on the Marketplace page. The screenshots aren't packaged into the `.vsix`.
+
+### Also listing in Cursor and VSCodium
+
+They use [Open VSX](https://open-vsx.org) rather than the Microsoft Marketplace. Create an account and a token there, then publish the same file: `npx ovsx publish penmark-<version>.vsix -p <token>`.
 
 ## Things that can break on a Claude Code update
 
