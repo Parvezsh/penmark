@@ -1,0 +1,387 @@
+{
+  "name": "penmark",
+  "displayName": "Penmark",
+  "description": "Review the markdown docs Claude Code edits: see only what Claude changed, comment on the text, and send all comments back in one go.",
+  "version": "0.1.0",
+  "publisher": "penmark-dev",
+  "preview": true,
+  "private": true,
+  "license": "0BSD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Parvezsh/penmark.git"
+  },
+  "homepage": "https://github.com/Parvezsh/penmark#readme",
+  "bugs": {
+    "url": "https://github.com/Parvezsh/penmark/issues"
+  },
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "claude",
+    "claude code",
+    "markdown",
+    "review",
+    "redline",
+    "track changes",
+    "diff",
+    "comments",
+    "ai"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:markdown",
+    "onUri"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "penmark.installHooks",
+        "title": "Install Claude Code hook",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.uninstallHooks",
+        "title": "Uninstall Claude Code hook",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.toggleHighlights",
+        "title": "Show / hide highlights",
+        "category": "Penmark",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "penmark.hideHighlights",
+        "title": "Highlights are on: click to hide",
+        "category": "Penmark",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "penmark.showHighlights",
+        "title": "Highlights are hidden: click to show",
+        "category": "Penmark",
+        "icon": "$(eye-closed)"
+      },
+      {
+        "command": "penmark.nextChange",
+        "title": "Next change",
+        "category": "Penmark",
+        "icon": "$(arrow-down)"
+      },
+      {
+        "command": "penmark.previousChange",
+        "title": "Previous change",
+        "category": "Penmark",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "penmark.showTracked",
+        "title": "Show docs to review",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.openReview",
+        "title": "Open preview",
+        "category": "Penmark",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "penmark.openSource",
+        "title": "Open source at first change",
+        "category": "Penmark",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "penmark.openDiff",
+        "title": "Open side-by-side diff",
+        "category": "Penmark",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "penmark.markReviewed",
+        "title": "Mark doc as reviewed",
+        "category": "Penmark",
+        "icon": "$(check)"
+      },
+      {
+        "command": "penmark.markAllReviewed",
+        "title": "Mark all docs as reviewed",
+        "category": "Penmark",
+        "icon": "$(check-all)",
+        "enablement": "penmark.hasDocs"
+      },
+      {
+        "command": "penmark.refresh",
+        "title": "Refresh",
+        "category": "Penmark",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "penmark.addComment",
+        "title": "Comment on selection",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.saveNativeComment",
+        "title": "Save comment for Claude",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.deleteComment",
+        "title": "Delete comment",
+        "category": "Penmark",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "penmark.revealComment",
+        "title": "Show comment",
+        "category": "Penmark"
+      },
+      {
+        "command": "penmark.clearComments",
+        "title": "Delete all pending comments",
+        "category": "Penmark",
+        "icon": "$(clear-all)",
+        "enablement": "penmark.hasComments"
+      },
+      {
+        "command": "penmark.sendComments",
+        "title": "Send comments to Claude",
+        "category": "Penmark",
+        "icon": "$(send)",
+        "enablement": "penmark.hasComments"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "penmark",
+          "title": "Penmark",
+          "icon": "media/penmark.svg"
+        }
+      ]
+    },
+    "views": {
+      "penmark": [
+        {
+          "id": "penmark.review",
+          "name": "To review"
+        },
+        {
+          "id": "penmark.comments",
+          "name": "Pending comments"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "penmark.review",
+        "when": "!penmark.hookInstalled",
+        "contents": "No Claude changes waiting for review.\nClaude's edits to markdown files show up here once the Claude Code hook is installed.\n[Install Claude Code hook](command:penmark.installHooks)"
+      },
+      {
+        "view": "penmark.review",
+        "when": "penmark.hookInstalled",
+        "contents": "No Claude changes waiting for review.\nThe Claude Code hook is installed. When Claude edits a markdown file in a new session, the doc shows up here with its changes highlighted."
+      },
+      {
+        "view": "penmark.comments",
+        "contents": "No pending comments.\nSelect text in a markdown file or its preview and press ⌥C (Option+C on Mac, Alt+C on Windows and Linux) to add one. Send them all to Claude together from here."
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "penmark.hideHighlights",
+          "when": "view == penmark.review && penmark.highlightsOn",
+          "group": "navigation@1"
+        },
+        {
+          "command": "penmark.showHighlights",
+          "when": "view == penmark.review && !penmark.highlightsOn",
+          "group": "navigation@1"
+        },
+        {
+          "command": "penmark.markAllReviewed",
+          "when": "view == penmark.review",
+          "group": "navigation@2"
+        },
+        {
+          "command": "penmark.refresh",
+          "when": "view == penmark.review",
+          "group": "navigation@3"
+        },
+        {
+          "command": "penmark.sendComments",
+          "when": "view == penmark.comments",
+          "group": "navigation@1"
+        },
+        {
+          "command": "penmark.clearComments",
+          "when": "view == penmark.comments",
+          "group": "navigation@2"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "penmark.openSource",
+          "when": "view == penmark.review && viewItem == trackedDoc",
+          "group": "inline@1"
+        },
+        {
+          "command": "penmark.openDiff",
+          "when": "view == penmark.review && viewItem == trackedDoc",
+          "group": "inline@2"
+        },
+        {
+          "command": "penmark.markReviewed",
+          "when": "view == penmark.review && viewItem == trackedDoc",
+          "group": "inline@3"
+        },
+        {
+          "command": "penmark.deleteComment",
+          "when": "view == penmark.comments && viewItem == reviewComment",
+          "group": "inline"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "penmark.saveNativeComment",
+          "when": "commentController == penmark && commentThreadIsEmpty"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "penmark.deleteComment",
+          "when": "commentController == penmark && commentThread == penmarkThread",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "penmark.hideHighlights",
+          "when": "resourceLangId == markdown && penmark.highlightsOn",
+          "group": "navigation@90"
+        },
+        {
+          "command": "penmark.showHighlights",
+          "when": "resourceLangId == markdown && !penmark.highlightsOn",
+          "group": "navigation@90"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "penmark.openReview",
+          "when": "false"
+        },
+        {
+          "command": "penmark.openSource",
+          "when": "false"
+        },
+        {
+          "command": "penmark.openDiff",
+          "when": "false"
+        },
+        {
+          "command": "penmark.saveNativeComment",
+          "when": "false"
+        },
+        {
+          "command": "penmark.deleteComment",
+          "when": "false"
+        },
+        {
+          "command": "penmark.revealComment",
+          "when": "false"
+        },
+        {
+          "command": "penmark.hideHighlights",
+          "when": "false"
+        },
+        {
+          "command": "penmark.showHighlights",
+          "when": "false"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "penmark.addComment",
+        "key": "alt+c",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "penmark.nextChange",
+        "key": "alt+]",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "penmark.previousChange",
+        "key": "alt+[",
+        "when": "editorTextFocus && editorLangId == markdown"
+      },
+      {
+        "command": "penmark.toggleHighlights",
+        "key": "ctrl+alt+h",
+        "when": "editorLangId == markdown || activeWebviewPanelId == 'markdown.preview'"
+      },
+      {
+        "command": "penmark.sendComments",
+        "key": "ctrl+alt+enter",
+        "when": "penmark.hasComments"
+      }
+    ],
+    "configuration": {
+      "title": "Penmark",
+      "properties": {
+        "penmark.storageDir": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Folder where the before/after copies of Claude's edits and your pending comments are kept. Empty means `~/.claude/penmark`. `~` is expanded. Changing it offers to move what's there."
+        },
+        "penmark.showRemovals": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show text Claude removed (struck through) next to where it was."
+        },
+        "penmark.markReviewedOnSend": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "When you send comments on a doc, mark it as reviewed, so Claude's next changes are highlighted on their own."
+        }
+      }
+    },
+    "markdown.markdownItPlugins": true,
+    "markdown.previewScripts": [
+      "./media/preview.js"
+    ],
+    "markdown.previewStyles": [
+      "./media/preview.css"
+    ]
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --target=node18 --external:vscode --outfile=dist/extension.js",
+    "watch": "npm run build -- --watch",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test out/test/*.test.js",
+    "test:integration": "scripts/test-integration.sh",
+    "package": "npm run build -- --minify && vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "~1.90.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "diff": "^8.0.4"
+  }
+}

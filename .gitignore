@@ -1,0 +1,6 @@
+node_modules/
+dist/
+out/
+*.vsix
+# Throwaway experiments, screenshots and downloaded research: not published.
+spike/

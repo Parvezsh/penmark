@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="48" fill="#1f2328"/>
+  <!-- the document -->
+  <path d="M62 30h92l42 42v146a10 10 0 0 1-10 10H62a10 10 0 0 1-10-10V40a10 10 0 0 1 10-10z" fill="#f6f8fa"/>
+  <path d="M154 30v32a10 10 0 0 0 10 10h32z" fill="#c9d1d9"/>
+  <!-- flagged lines -->
+  <path d="M84 74l17 30H67z" fill="#d29922"/>
+  <rect x="82.5" y="83" width="3" height="11" rx="1.5" fill="#1f2328"/>
+  <rect x="82.5" y="96.5" width="3" height="3" rx="1.5" fill="#1f2328"/>
+  <rect x="110" y="82" width="60" height="9" rx="4.5" fill="#8c959f"/>
+  <rect x="110" y="96" width="40" height="9" rx="4.5" fill="#8c959f"/>
+  <path d="M84 120l17 30H67z" fill="#d29922"/>
+  <rect x="82.5" y="129" width="3" height="11" rx="1.5" fill="#1f2328"/>
+  <rect x="82.5" y="142.5" width="3" height="3" rx="1.5" fill="#1f2328"/>
+  <rect x="110" y="128" width="60" height="9" rx="4.5" fill="#8c959f"/>
+  <rect x="110" y="142" width="34" height="9" rx="4.5" fill="#8c959f"/>
+  <!-- a reviewed line, marked green -->
+  <rect x="64" y="170" width="78" height="14" rx="3" fill="#2da44e" opacity="0.35"/>
+  <rect x="68" y="173" width="66" height="8" rx="4" fill="#1a7f37"/>
+  <!-- the pen, writing -->
+  <g transform="translate(186 168) rotate(-38)">
+    <path d="M-78 0l22-11v22z" fill="#f0c18b"/>
+    <path d="M-78 0l9-4.5v9z" fill="#1f2328"/>
+    <rect x="-56" y="-11" width="92" height="22" rx="4" fill="#0969da"/>
+    <rect x="30" y="-11" width="26" height="22" rx="6" fill="#0550ae"/>
+    <rect x="-20" y="-15" width="38" height="5" rx="2.5" fill="#0550ae"/>
+  </g>
+</svg>

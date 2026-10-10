@@ -1,0 +1,13 @@
+**
+!dist/extension.js
+!hooks/penmark.js
+!media/preview.js
+!media/preview.css
+!media/penmark.svg
+!media/icon.png
+!docs/images/**
+!package.json
+!README.md
+!CHANGELOG.md
+!LICENSE
+!THIRD_PARTY_NOTICES.md

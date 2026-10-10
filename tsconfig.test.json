@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["test", "src/store.ts", "src/hookInstaller.ts", "src/paths.ts", "src/sessions.ts", "src/changes.ts", "src/comments.ts", "src/notes.ts"]
+}
