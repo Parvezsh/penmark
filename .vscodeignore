@@ -5,7 +5,6 @@
 !media/preview.css
 !media/penmark.svg
 !media/icon.png
-!docs/images/**
 !package.json
 !README.md
 !CHANGELOG.md

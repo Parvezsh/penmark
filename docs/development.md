@@ -49,7 +49,7 @@ Before the first release:
 
 1. **License:** done. The project is 0BSD (`LICENSE`), so anyone can use it with no conditions. The bundled jsdiff library is BSD-3-Clause, and its notice ships in `THIRD_PARTY_NOTICES.md`; keep that file up to date if you add bundled dependencies.
 2. **Create a publisher** at <https://marketplace.visualstudio.com/manage>, signing in with a Microsoft account. Then set `"publisher"` in `package.json` to its ID (it is the placeholder `penmark-dev` now). The extension ID becomes `<publisher>.penmark`; the preview script reads it at runtime, so nothing else needs changing.
-3. **Repository:** done. `repository`, `homepage` and `bugs` point at the public GitHub repo, so the README screenshots resolve to its URLs on the Marketplace page.
+3. **Repository:** done. `repository`, `homepage` and `bugs` point at the public GitHub repo, so the README screenshots resolve to its URLs on the Marketplace page. The screenshots aren't packaged into the `.vsix`; the README links to the GitHub copies.
 4. **Create a Personal Access Token** in Azure DevOps with the *Marketplace → Manage* scope, then run `npx vsce login <publisher>`.
 
 Each release:
