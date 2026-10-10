@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js 20 for building and packaging. The hook itself runs on Node 18 or newer.
+- Node.js 20 for building and packaging (`.nvmrc` pins it: run `nvm use`). `vsce` fails on Node 18 with `ReferenceError: File is not defined`. The hook itself runs on Node 18 or newer.
 - VS Code 1.90 or newer, with the `code` command on your PATH. The integration tests use it.
 
 ```sh
