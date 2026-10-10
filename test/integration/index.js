@@ -45,7 +45,7 @@ const render = async file => vscode.commands.executeCommand('markdown.api.render
 const steps = [
   ['activates and writes the pointer', async () => {
     await vscode.window.showTextDocument(vscode.Uri.file(planPath));
-    api = await vscode.extensions.getExtension('penmark-dev.penmark').activate();
+    api = await vscode.extensions.getExtension('brok.penmark').activate();
     const cmds = await vscode.commands.getCommands(true);
     for (const c of ['installHooks', 'toggleHighlights', 'addComment', 'sendComments', 'markReviewed']) assert.ok(cmds.includes(`penmark.${c}`), c);
     const pointer = JSON.parse(fs.readFileSync(path.join(claude, 'penmark.json'), 'utf8'));
@@ -82,7 +82,7 @@ const steps = [
     const data = JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&'));
     assert.deepEqual(data.a, ['QA starts in February.']);
     assert.deepEqual(data.m.map(x => [x.t, x.w]), [['We ship in April.', ['April']]]);
-    assert.match(html, /id="penmark-meta" data-ext="penmark-dev.penmark" data-on="1"/);
+    assert.match(html, /id="penmark-meta" data-ext="brok.penmark" data-on="1"/);
     await vscode.commands.executeCommand('penmark.toggleHighlights');
     const off = await render(planPath);
     assert.ok(!/data-penmark=/.test(off), 'no highlights when toggled off');

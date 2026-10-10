@@ -3,7 +3,7 @@
   "displayName": "Penmark",
   "description": "Review the markdown docs Claude Code edits: see only what Claude changed, comment on the text, and send all comments back in one go.",
   "version": "0.1.0",
-  "publisher": "penmark-dev",
+  "publisher": "brok",
   "preview": true,
   "private": true,
   "license": "0BSD",
